@@ -1,15 +1,26 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import {z} from 'zod';
 
-type FormFields = {
-  email: string;
-  password: string;
-};
+const schema = z.object({
+  email: z.email(),
+  password: z.string().min(8),
+})
+
+// infering from schema directly
+type FormFields = z.infer<typeof schema>;
+
+// type FormFields = {
+//   email: string;
+//   password: string;
+// };
 
 const ReactHookFormCosden = () => {
   const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<FormFields>({
     defaultValues: {
       email: "test@email.com"
-    }
+    },
+    resolver: zodResolver(schema)
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
@@ -18,6 +29,7 @@ const ReactHookFormCosden = () => {
       throw new Error();
     console.log(data);
     } catch (error) {
+      console.log(error)
       // setError("email", {
       //   message: "This  email is already taken"
       // })
@@ -31,7 +43,8 @@ const ReactHookFormCosden = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input
+      {/* react hook form alone */}
+      {/* <input
         {...register('email', {
           required: "Email is required",
           // pattern: 'regex pattern'
@@ -44,25 +57,24 @@ const ReactHookFormCosden = () => {
         })}
         type="text"
         placeholder="email"
+      /> */}
+      {/* WITH ZOD */}
+      <input
+        {...register('email')}
+        type="text"
+        placeholder="email"
       />
-      {errors.email && <div>{errors.email.message}</div>}
+      {errors.email && <div style={{ color: "red"}}>{errors.email.message}</div>}
 
       <input
-        {...register('password', {
-          required: "Password is required",
-          // minLength: 8,
-          minLength: {
-            value: 8,
-            message: "Password must have at least 8 characters."
-          },
-        })}
+        {...register('password')}
         type="password"
         placeholder="Password"
       />
-      {errors.password && <div>{errors.password.message}</div>}
+      {errors.password && <div style={{ color: "red"}}>{errors.password.message}</div>}
 
       <button disabled={isSubmitting} type="submit">{isSubmitting ? "Loading" : "Submit"}</button>
-      {errors.root && <div>{errors.root.message}</div>}
+      {errors.root && <div style={{ color: "red"}}>{errors.root.message}</div>}
     </form>
   );
 };
