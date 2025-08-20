@@ -1,3 +1,7 @@
+React Hook Form Course for Beginners (inc. Zod + Material UI) - fcc
+Link: https://www.youtube.com/watch?v=JyeWoqWsQFo
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
