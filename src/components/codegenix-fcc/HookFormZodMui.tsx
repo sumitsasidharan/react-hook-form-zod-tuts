@@ -1,7 +1,8 @@
-import Users from './users/components/Users';
+// import Users from './users/components/Users';
+import { UsersProvidder } from './users/components/UsersProvider';
 
 const HookFormZodMui = () => {
-  return <Users />;
+  return <UsersProvidder />;
 };
 
 export default HookFormZodMui;

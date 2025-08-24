@@ -1,5 +1,5 @@
 import TextField from '@mui/material/TextField';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext } from 'react-hook-form';
 import { userSchema, type UserSchema } from '../types/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Stack from '@mui/material/Stack';
@@ -7,14 +7,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { RHFAutocomplete } from './shared/RHFAutocomplete';
 
 const Users = () => {
-  const {
-    register,
-    formState: { errors },
-  } = useForm<UserSchema>({
-    mode: 'all',
-    resolver: zodResolver(userSchema),
-  });
-  // 'mode': by default, react hook form shows errors when users hit the submit button ie onSubmit. So change it using 'mode'.
+  const { register, formState: { errors }} = useFormContext<UserSchema>();
 
   return (
     <Stack sx={{ gap: 2 }}>
@@ -30,11 +23,11 @@ const Users = () => {
         error={!!errors.email}
         helperText={errors.email?.message}
       />
-      <RHFAutocomplete />
-      <Autocomplete
+      <RHFAutocomplete<UserSchema> name="states" />
+      {/* <Autocomplete
         options={[{ id: '1', label: 'Texas' }]}
         renderInput={(params) => <TextField {...params} label="states" />}
-      />
+      /> */}
     </Stack>
   );
 };

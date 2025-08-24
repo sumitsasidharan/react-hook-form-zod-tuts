@@ -1,10 +1,39 @@
-import Autocomplete from "@mui/material/Autocomplete";
-import { Controller } from "react-hook-form";
+import Autocomplete from '@mui/material/Autocomplete';
+import {
+  Controller,
+  useFormContext,
+  type FieldValues,
+  type Path,
+} from 'react-hook-form';
+import type { Option } from '../../types/option';
 
-export function RHFAutocomplete() {
+type Props<T extends FieldValues> = {
+  name: Path<T>;
+  options: Option[];
+};
+
+export function RHFAutocomplete<T extends FieldValues>({
+  name,
+  options,
+}: Props<T>) {
+  const { control } = useFormContext();
   return (
-    <Controller control={control} name={name} render={(params) => <Autocomplete />} />
-  )
+    <Controller
+      control={control}
+      name={name}
+      render={({ value, onChange, ref }) => (
+        <Autocomplete
+          options={options}
+          value={value.map((id: string) =>
+            options.find((item) => item.id === id)
+          )}
+          onChange={(_, newValue) => {
+            onChange(newValue.map(item => item.id))
+          }}
+        />
+      )}
+    />
+  );
 }
 
-// 49.32
+//1:02:19
